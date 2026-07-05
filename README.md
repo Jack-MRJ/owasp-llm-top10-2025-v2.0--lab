@@ -193,15 +193,15 @@ docker logs -f ai-lab
 
 ## 部分界面展示
 
-![2](D:\Desktop\AI相关\AI练习题\owasp\owasp-llm-top10-lab\相关截图\2.png)
+![2](相关截图/2.png)
 
-![3](D:\Desktop\AI相关\AI练习题\owasp\owasp-llm-top10-lab\相关截图\3.png)
+![3](相关截图/3.png)
 
-![4](D:\Desktop\AI相关\AI练习题\owasp\owasp-llm-top10-lab\相关截图\4.png)
+![4](相关截图/4.png)
 
-![5](D:\Desktop\AI相关\AI练习题\owasp\owasp-llm-top10-lab\相关截图\5.png)
+![5](相关截图/5.png)
 
-![6](D:\Desktop\AI相关\AI练习题\owasp\owasp-llm-top10-lab\相关截图\6.png)
+![6](相关截图/6.png)
 
 ## 💻 环境要求
 
