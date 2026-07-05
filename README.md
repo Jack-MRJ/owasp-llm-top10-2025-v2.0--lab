@@ -130,7 +130,7 @@ docker run -d --name ai-lab -p 5000:5000  --restart unless-stopped siaadh1/llm-s
 docker logs -f ai-lab    # 等待出现 "Running on http://0.0.0.0:5000"
 ```
 
-![image-20260705214646850](C:\Users\Administrator\AppData\Roaming\Typora\typora-user-images\image-20260705214646850.png)
+https://github.com/Jack-MRJ/owasp-llm-top10-2025-v2.0--lab/blob/main/%E7%9B%B8%E5%85%B3%E6%88%AA%E5%9B%BE/1.png
 
 浏览器打开 `http://localhost:5000`
 
