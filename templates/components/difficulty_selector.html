@@ -1,0 +1,78 @@
+{# 难度选择器组件 — 用于首页和关卡页 #}
+<div class="difficulty-selector btn-group" role="group" aria-label="难度选择">
+    <input type="radio" class="btn-check" name="difficulty-mode" id="diff-beginner"
+           value="beginner" autocomplete="off" checked>
+    <label class="btn btn-outline-info btn-sm" for="diff-beginner"
+           title="初级：完整的利用方式教学">
+        🔰 初级
+    </label>
+    <input type="radio" class="btn-check" name="difficulty-mode" id="diff-advanced"
+           value="advanced" autocomplete="off">
+    <label class="btn btn-outline-warning btn-sm" for="diff-advanced"
+           title="高级：增加了防御措施，需要更巧妙的方法">
+        ⚔️ 高级
+    </label>
+</div>
+
+<script>
+// 难度选择器交互逻辑
+(function() {
+    function getCurrentDifficulty() {
+        // 优先从 URL 参数读取
+        const urlParams = new URLSearchParams(window.location.search);
+        const urlMode = urlParams.get('mode');
+        if (urlMode === 'beginner' || urlMode === 'advanced') return urlMode;
+        // 其次从 sessionStorage 读取
+        const stored = sessionStorage.getItem('difficulty_mode');
+        if (stored === 'beginner' || stored === 'advanced') return stored;
+        return 'beginner';
+    }
+
+    function setDifficultyUI(mode) {
+        const beginnerRadio = document.getElementById('diff-beginner');
+        const advancedRadio = document.getElementById('diff-advanced');
+        if (beginnerRadio && advancedRadio) {
+            beginnerRadio.checked = (mode === 'beginner');
+            advancedRadio.checked = (mode === 'advanced');
+        }
+        sessionStorage.setItem('difficulty_mode', mode);
+    }
+
+    function onDifficultyChange(mode) {
+        setDifficultyUI(mode);
+
+        // 向服务端同步难度设置
+        fetch('/api/set-difficulty', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({mode: mode})
+        }).catch(() => {});
+
+        // 如果当前在关卡页面，刷新以切换难度
+        const currentPath = window.location.pathname;
+        if (currentPath.startsWith('/challenge/')) {
+            const url = new URL(window.location);
+            url.searchParams.set('mode', mode);
+            window.location.href = url.toString();
+        }
+    }
+
+    // 初始化 UI
+    document.addEventListener('DOMContentLoaded', function() {
+        const current = getCurrentDifficulty();
+        setDifficultyUI(current);
+
+        // 绑定事件
+        document.getElementById('diff-beginner')?.addEventListener('change', function() {
+            if (this.checked) onDifficultyChange('beginner');
+        });
+        document.getElementById('diff-advanced')?.addEventListener('change', function() {
+            if (this.checked) onDifficultyChange('advanced');
+        });
+    });
+
+    // 暴露全局方法
+    window.getCurrentDifficulty = getCurrentDifficulty;
+    window.setDifficultyUI = setDifficultyUI;
+})();
+</script>

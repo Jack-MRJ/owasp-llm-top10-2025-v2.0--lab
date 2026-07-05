@@ -1,0 +1,118 @@
+{
+    "1": {
+        "1": {
+            "flag": "flag{4f4a7357f8ab}",
+            "name": "角色扮演注入"
+        },
+        "2": {
+            "flag": "flag{2d4f34603abe}",
+            "name": "安全限制覆盖"
+        },
+        "3": {
+            "flag": "flag{b371506a2433}",
+            "name": "多语言绕过"
+        },
+        "4": {
+            "flag": "flag{6d8bb66693da}",
+            "name": "变量拆分拼接"
+        },
+        "5": {
+            "flag": "flag{640d3160c5c2}",
+            "name": "编码绕过"
+        },
+        "6": {
+            "flag": "flag{ac33126310a6}",
+            "name": "文件上传注入"
+        },
+        "7": {
+            "flag": "flag{cb715889e9e3}",
+            "name": "混淆指令注入"
+        },
+        "8": {
+            "flag": "flag{782c65122b25}",
+            "name": "多轮渐进注入"
+        },
+        "9": {
+            "flag": "flag{7ceb0f24dc91}",
+            "name": "格式化输出绕过"
+        },
+        "10": {
+            "flag": "flag{58b98d96773c}",
+            "name": "填空续写诱导"
+        },
+        "11": {
+            "flag": "flag{d0496771f8d1}",
+            "name": "思维链劫持"
+        },
+        "12": {
+            "flag": "flag{4fa552d5c398}",
+            "name": "负面提示反向心理"
+        }
+    },
+    "2": {
+        "1": {
+            "flag": "flag{s3ns1t1v3_d4t4_l34k4g3_f0und}",
+            "name": "敏感信息泄露"
+        }
+    },
+    "3": {
+        "1": {
+            "flag": "flag{5upply_ch41n_b4ckd00r_d3t3ct3d}",
+            "name": "供应链风险"
+        }
+    },
+    "4": {
+        "1": {
+            "flag": "flag{p0150n3d_tr41n1ng_d4t4_3xp053d}",
+            "name": "数据和模型投毒"
+        }
+    },
+    "5": {
+        "1": {
+            "flag": "flag{x55_v14_llm_0utput_h4ndl1ng}",
+            "name": "XSS注入"
+        },
+        "2": {
+            "flag": "flag{ssrf_1nt3rn4l_fl4g_4cc3ss}",
+            "name": "SSRF内部访问"
+        }
+    },
+    "6": {
+        "1": {
+            "flag": "flag{3xc35s1v3_4g3ncy_0v3rpr1v1l3g3d}",
+            "name": "过度代理"
+        }
+    },
+    "7": {
+        "1": {
+            "flag": "flag{5y5t3m_pr0mpt_l34k3d_p455w0rd}",
+            "name": "系统提示词泄露"
+        }
+    },
+    "8": {
+        "1": {
+            "flag": "flag{v3ct0r_st0r3_p0150n3d_d0cum3nt}",
+            "name": "向量与嵌入弱点"
+        }
+    },
+    "9": {
+        "1": {
+            "flag": "flag{m1s1nf0rm4t10n_v3r1f13d_truth}",
+            "name": "虚假信息"
+        }
+    },
+    "10": {
+        "1": {
+            "flag": "flag{unb0und3d_l0ng_0utput_byp455}",
+            "name": "诱导长输出"
+        },
+        "2": {
+            "flag": "flag{unb0und3d_mcp_t00l_4bus3}",
+            "name": "MCP工具滥用"
+        },
+        "3": {
+            "flag": "flag{unb0und3d_d0s_fl00d_4tt4ck}",
+            "name": "API洪水攻击"
+        }
+    }
+}

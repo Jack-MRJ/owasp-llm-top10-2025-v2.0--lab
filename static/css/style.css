@@ -1,0 +1,593 @@
+/* ===== OWASP LLM Top 10 靶场 — 自定义样式 ===== */
+
+/* 全局 */
+body {
+    background: linear-gradient(135deg, #0d1117 0%, #161b22 100%);
+    color: #c9d1d9;
+    min-height: 100vh;
+}
+
+/* 导航栏 */
+.navbar {
+    border-bottom: 1px solid #30363d;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* 卡片 */
+.card {
+    background: #161b22;
+    border: 1px solid #30363d;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.challenge-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 25px rgba(0, 100, 255, 0.2);
+    border-color: #58a6ff;
+}
+
+.challenge-card.solved {
+    border-color: #238636;
+    background: linear-gradient(135deg, #161b22, #0d2b1a);
+}
+
+.challenge-card.solved:hover {
+    box-shadow: 0 8px 25px rgba(35, 134, 54, 0.3);
+}
+
+.challenge-icon {
+    font-size: 1.5rem;
+    margin-right: 0.5rem;
+}
+.challenge-icon-large {
+    font-size: 2rem;
+}
+
+.card-header {
+    background: #21262d;
+    border-bottom: 1px solid #30363d;
+}
+.card-footer {
+    border-top: 1px solid #30363d;
+}
+
+/* 聊天区域 */
+.chat-area {
+    height: 55vh;
+    overflow-y: auto;
+    background: #0d1117;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.chat-message {
+    max-width: 85%;
+    padding: 0.75rem 1rem;
+    border-radius: 12px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.user-message {
+    align-self: flex-end;
+    background: #1f6feb;
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+
+.assistant-message {
+    align-self: flex-start;
+    background: #21262d;
+    color: #c9d1d9;
+    border-bottom-left-radius: 4px;
+    border: 1px solid #30363d;
+}
+
+.message-content p {
+    margin-bottom: 0.25rem;
+}
+
+.message-content pre {
+    background: #0d1117;
+    color: #7ee787;
+    padding: 0.5rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font-size: 0.85rem;
+}
+
+.message-content code {
+    color: #d2a8ff;
+    background: #1c2128;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+
+/* 提示词注入成功标志 */
+.message-content .flag-highlight {
+    background: #238636;
+    color: white;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    font-family: monospace;
+    font-weight: bold;
+}
+
+/* 进度条 */
+.progress {
+    background: #21262d;
+    border: 1px solid #30363d;
+}
+.progress-bar {
+    background: linear-gradient(90deg, #238636, #2ea043);
+}
+
+/* 提示/警告 */
+.alert {
+    border: 1px solid #30363d;
+}
+.alert-info {
+    background: #1c2d40;
+    color: #79c0ff;
+}
+.alert-success {
+    background: #0d2b1a;
+    color: #7ee787;
+}
+.alert-danger {
+    background: #2d1b1b;
+    color: #f85149;
+}
+.alert-warning {
+    background: #2d2b1a;
+    color: #d2991d;
+}
+
+/* 输入框 */
+.form-control {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+.form-control:focus {
+    background: #0d1117;
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 0.2rem rgba(31, 111, 235, 0.25);
+    color: #f0f6fc;
+}
+.form-select {
+    background-color: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+.form-select:focus {
+    border-color: #58a6ff;
+    box-shadow: 0 0 0 0.2rem rgba(31, 111, 235, 0.25);
+}
+
+/* 按钮增强 */
+.btn-outline-primary {
+    border-color: #1f6feb;
+    color: #58a6ff;
+}
+.btn-outline-primary:hover {
+    background: #1f6feb;
+    color: white;
+}
+
+/* 难度星级 */
+.difficulty {
+    color: #d2991d;
+    font-size: 0.9rem;
+}
+
+/* 滚动条 */
+.chat-area::-webkit-scrollbar {
+    width: 6px;
+}
+.chat-area::-webkit-scrollbar-track {
+    background: #0d1117;
+}
+.chat-area::-webkit-scrollbar-thumb {
+    background: #30363d;
+    border-radius: 3px;
+}
+.chat-area::-webkit-scrollbar-thumb:hover {
+    background: #484f58;
+}
+
+/* 页脚 */
+footer {
+    border-top: 1px solid #30363d;
+}
+
+/* ── 难度选择器 ── */
+.difficulty-selector .btn-outline-info {
+    border-color: #58a6ff;
+    color: #58a6ff;
+}
+.difficulty-selector .btn-outline-info:hover,
+.difficulty-selector .btn-check:checked + .btn-outline-info {
+    background: #1f6feb;
+    color: white;
+}
+.difficulty-selector .btn-outline-warning {
+    border-color: #d2991d;
+    color: #d2991d;
+}
+.difficulty-selector .btn-outline-warning:hover,
+.difficulty-selector .btn-check:checked + .btn-outline-warning {
+    background: #9e6a03;
+    color: white;
+}
+
+/* ── 对抗ML模块卡片 ── */
+.adv-module-card {
+    border-left: 3px solid #d2991d !important;
+}
+.adv-module-card:hover {
+    border-color: #d2991d;
+    box-shadow: 0 8px 25px rgba(210, 153, 29, 0.2);
+}
+.adv-module-card.solved {
+    border-left: 3px solid #238636 !important;
+}
+
+/* ── 代码展示区域 ── */
+.code-display {
+    background: #0d1117;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+.code-display pre {
+    margin: 0;
+}
+
+/* ── 参数滑块 ── */
+.form-range {
+    background: transparent;
+}
+.form-range::-webkit-slider-runnable-track {
+    background: #30363d;
+    border-radius: 3px;
+}
+.form-range::-webkit-slider-thumb {
+    background: #d2991d;
+    box-shadow: none;
+}
+
+/* ── 可视化图片 ── */
+.adv-image-container {
+    background: #0d1117;
+    border-radius: 8px;
+    padding: 0.5rem;
+    border: 1px solid #30363d;
+}
+.adv-image-container img {
+    image-rendering: auto;
+}
+
+/* ── 结果横幅 ── */
+#result-banner .alert-success {
+    background: linear-gradient(135deg, #0d2b1a, #1a3d2a);
+    border: 2px solid #238636;
+}
+#result-banner .alert-warning {
+    background: linear-gradient(135deg, #2d2b1a, #3d3520);
+}
+
+/* ── Dropdown 暗色主题 ── */
+.dropdown-menu-dark {
+    background: #161b22;
+    border: 1px solid #30363d;
+}
+.dropdown-menu-dark .dropdown-item:hover {
+    background: #1f6feb;
+}
+
+/* ── Nav 进度 ── */
+#nav-solved-count {
+    font-weight: bold;
+    color: #7ee787;
+}
+
+/* ── 对抗ML 文字可见性修复 ── */
+#visualization-area,
+#visualization-area p,
+#visualization-area h5,
+#visualization-area small {
+    color: #c9d1d9;
+}
+#visualization-area .text-muted {
+    color: #8b949e !important;
+}
+#param-panel label {
+    color: #c9d1d9;
+}
+#param-panel .text-info {
+    color: #58a6ff !important;
+}
+#param-panel .text-muted {
+    color: #8b949e !important;
+}
+#learning-objectives,
+#learning-objectives li {
+    color: #c9d1d9;
+}
+#result-banner .alert,
+#result-banner p,
+#result-banner h5 {
+    color: #c9d1d9;
+}
+#code-display {
+    color: #e6edf3;
+}
+.form-select,
+.form-select option {
+    color: #c9d1d9;
+    background-color: #161b22;
+}
+.challenge-icon-large {
+    color: inherit;
+}
+
+/* ── 工具面板 (LLM03/LLM04) 文字可见性修复 ── */
+#tools-panel .card-body {
+    background: #1c2128;
+    color: #c9d1d9;
+}
+#tools-panel .card-body p,
+#tools-panel .card-body span,
+#tools-panel .card-body code,
+#tools-panel .card-body div,
+#tools-panel .card-body strong {
+    color: #c9d1d9;
+}
+#tools-panel .text-muted {
+    color: #8b949e !important;
+}
+#tools-panel .text-info {
+    color: #58a6ff !important;
+}
+#tools-panel .text-warning {
+    color: #d2991d !important;
+}
+#tools-panel .text-dark {
+    color: #0d1117 !important;
+}
+#tools-panel .form-control::placeholder {
+    color: #6e7681;
+}
+#tools-panel .badge {
+    font-size: 0.8rem;
+}
+
+/* ── 帮助模态框 暗色主题 ── */
+#helpModal .modal-content {
+    background: #161b22;
+    border: 1px solid #30363d;
+    color: #c9d1d9;
+}
+#helpModal .modal-header {
+    border-bottom: 1px solid #30363d;
+    background: #21262d;
+}
+#helpModal .modal-footer {
+    border-top: 1px solid #30363d;
+}
+#helpModal .modal-title {
+    color: #f0f6fc;
+}
+#helpModal .accordion-item {
+    background: #161b22;
+    border: 1px solid #30363d;
+}
+#helpModal .accordion-button {
+    background: #21262d;
+    color: #c9d1d9;
+    border: 1px solid #30363d;
+}
+#helpModal .accordion-button:not(.collapsed) {
+    background: #1f6feb;
+    color: white;
+}
+#helpModal .accordion-button::after {
+    filter: invert(0.8);
+}
+#helpModal .accordion-body {
+    background: #0d1117;
+    color: #c9d1d9;
+    border-top: 1px solid #30363d;
+}
+#helpModal pre {
+    background: #0d1117;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    padding: 0.75rem;
+    color: #7ee787;
+    font-size: 0.85rem;
+}
+#helpModal code {
+    color: #d2a8ff;
+    background: #1c2128;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+    font-size: 0.9rem;
+}
+#helpModal pre code {
+    color: #7ee787;
+    background: transparent;
+    padding: 0;
+}
+#helpModal .spoiler-alert {
+    background: #2d1b1b;
+    border: 1px solid #f85149;
+    color: #f85149;
+}
+#helpModal .list-group-item {
+    background: #161b22;
+    color: #c9d1d9;
+    border-color: #30363d;
+}
+#helpModal hr {
+    border-color: #30363d;
+}
+#helpModal .badge.bg-info {
+    background-color: #1f6feb !important;
+}
+#helpModal .badge.bg-warning {
+    background-color: #9e6a03 !important;
+}
+
+/* ── 小白入门指南文字可见性 ── */
+#beginner-guide-body,
+#beginner-guide-body h5,
+#beginner-guide-body p,
+#beginner-guide-body li,
+#beginner-guide-body strong,
+#beginner-guide-body small,
+#beginner-guide-body h1, #beginner-guide-body h2,
+#beginner-guide-body h3, #beginner-guide-body h4,
+.adv-guide-text,
+.adv-guide-text p,
+.adv-guide-text li,
+.adv-guide-text strong,
+.adv-guide-text small,
+.adv-guide-text h1, .adv-guide-text h2,
+.adv-guide-text h3, .adv-guide-text h4,
+.adv-guide-text code {
+    color: #c9d1d9;
+}
+.adv-guide-text code {
+    color: #d2a8ff;
+    background: #1c2128;
+    padding: 0.15rem 0.4rem;
+    border-radius: 3px;
+}
+.adv-guide-text ul,
+.adv-guide-text ol {
+    padding-left: 1.5rem;
+}
+#beginner-guide-card .card-header {
+    background: #1c2d40;
+    border: 1px solid #58a6ff;
+}
+#ref-code-card .card-header {
+    background: #21262d;
+    border: 1px solid #30363d;
+}
+#ref-code-body .alert-warning {
+    background: #2d2b1a;
+    color: #d2991d;
+    border: 1px solid #d2991d;
+}
+
+/* ── 对抗ML 结果区域文字全面覆盖 ── */
+#result-banner *,
+#result-banner .alert,
+#result-banner .alert-success,
+#result-banner .alert-info,
+#result-banner .alert-warning,
+#result-banner .alert-danger {
+    color: #c9d1d9 !important;
+}
+#result-banner .text-success { color: #3fb950 !important; }
+#result-banner .text-danger { color: #f85149 !important; }
+#result-banner .text-warning { color: #d2991d !important; }
+
+/* 指标卡片文字 */
+#metrics-panel,
+#metrics-panel .card,
+#metrics-panel .card-body,
+#metrics-panel h5,
+#metrics-panel p,
+#metrics-panel span,
+#metrics-panel small,
+#metrics-panel .text-muted {
+    color: #c9d1d9;
+}
+#metrics-panel .card { background: #21262d; border: 1px solid #30363d; }
+
+/* 迭代图表容器 */
+#chart-container,
+#chart-container p,
+#chart-container label {
+    color: #c9d1d9;
+}
+
+/* Flag条件描述 */
+#flag-condition-card,
+#flag-condition-card .card-body,
+#flag-condition-card p,
+#flag-condition-card span,
+#flag-condition-card small {
+    color: #c9d1d9;
+}
+#flag-condition-card .card { background: #21262d; border: 1px solid #30363d; }
+
+/* 代码实践区 */
+#code-practice-card .card-header { background: #1c2128; }
+#code-practice-body,
+#code-practice-body p,
+#code-practice-body .text-muted,
+#code-practice-body label {
+    color: #c9d1d9;
+}
+#code-execution-output,
+#code-execution-output pre,
+#code-execution-output code {
+    color: #c9d1d9;
+}
+
+/* 学习目标列表 */
+#learning-objectives,
+#learning-objectives li,
+#learning-objectives .text-muted {
+    color: #c9d1d9;
+}
+#learning-objectives li::marker {
+    color: #58a6ff;
+}
+
+/* ── 深色主题文字可读性修复 ── */
+.text-muted,
+p.text-muted,
+small.text-muted {
+    color: #8b949e !important;
+}
+.card-header strong {
+    color: #e6edf3 !important;
+}
+#beginner-guide-card .card-header {
+    background: #1c2d40;
+    color: #e6edf3;
+}
+#beginner-guide-card .card-header strong {
+    color: #e6edf3 !important;
+}
+.btn-outline-info {
+    color: #58a6ff !important;
+    border-color: #58a6ff !important;
+}
+.btn-outline-info:hover {
+    background: #58a6ff !important;
+    color: #fff !important;
+}
+
+/* 响应式 */
+@media (max-width: 768px) {
+    .chat-message {
+        max-width: 95%;
+    }
+    .display-4 {
+        font-size: 2rem;
+    }
+}

@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% block title %}{{ challenge.sub_name }} — OWASP LLM Top 10{% endblock %}
+
+{% block content %}
+{% include "components/help_modal.html" %}
+<div class="container mt-4">
+    <!-- 关卡头部 -->
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{{ url_for('index') }}">首页</a></li>
+                    <li class="breadcrumb-item active">{{ challenge.owasp_id }}-{{ sub }}: {{ challenge.sub_name }}</li>
+                </ol>
+            </nav>
+            <h2>
+                <span class="challenge-icon-large">{{ challenge.icon }}</span>
+                {{ challenge.sub_name }}
+                <span class="badge bg-primary ms-2">{{ challenge.owasp_id }}-{{ sub }}</span>
+                <button class="btn btn-outline-info btn-sm ms-2" onclick="showHelp('owasp', {{ level }}, {{ sub }})"
+                        title="查看通关指南">
+                    <i class="bi bi-question-circle"></i> 通关提示
+                </button>
+                {% if solved %}
+                <span class="badge bg-success ms-2"><i class="bi bi-check-lg"></i> 已解决</span>
+                {% endif %}
+            </h2>
+            <p class="text-muted">{{ challenge.difficulty }}</p>
+            <div class="alert alert-info">
+                <i class="bi bi-info-circle"></i>
+                {{ challenge.description }}
+            </div>
+        </div>
+        <div class="col-md-4 text-end">
+            <!-- 子关卡导航 -->
+            {% if max_sub > 1 %}
+            <div class="mb-3">
+                <label class="form-label small text-muted">子关卡:</label>
+                <div class="btn-group">
+                    {% for i in range(1, max_sub + 1) %}
+                    <a href="{{ url_for('challenge_page', level=level, sub=i) }}"
+                       class="btn btn-sm {% if i == sub %}btn-primary{% else %}btn-outline-secondary{% endif %}">
+                        {{ i }}
+                    </a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+            <div class="btn-group-vertical">
+                <button class="btn btn-outline-danger btn-sm" onclick="resetChat()">
+                    <i class="bi bi-arrow-counterclockwise"></i> 重置对话
+                </button>
+                <a href="{{ url_for('submit_flag_page') }}" class="btn btn-outline-success btn-sm mt-1">
+                    <i class="bi bi-flag"></i> 提交 Flag
+                </a>
+                <!-- 上/下关卡导航 -->
+                <div class="btn-group mt-1">
+                    {% if prev_challenge %}
+                    <a href="{{ url_for('challenge_page', level=prev_challenge.level, sub=prev_challenge.sub) }}"
+                       class="btn btn-outline-secondary btn-sm" title="{{ prev_challenge.sub_name }}">
+                        <i class="bi bi-chevron-left"></i> 上一关
+                    </a>
+                    {% endif %}
+                    {% if next_challenge %}
+                    <a href="{{ url_for('challenge_page', level=next_challenge.level, sub=next_challenge.sub) }}"
+                       class="btn btn-outline-secondary btn-sm" title="{{ next_challenge.sub_name }}">
+                        下一关 <i class="bi bi-chevron-right"></i>
+                    </a>
+                    {% endif %}
+                </div>
+                <a href="{{ url_for('index') }}" class="btn btn-outline-secondary btn-sm mt-1">
+                    <i class="bi bi-arrow-left"></i> 返回首页
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- LLM01-6 文件上传面板 -->
+    {% if level == 1 and sub == 6 %}
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card" id="upload-panel">
+                <div class="card-header d-flex justify-content-between align-items-center" style="cursor:pointer" onclick="document.getElementById('upload-body').style.display = document.getElementById('upload-body').style.display === 'none' ? 'block' : 'none'">
+                    <strong><i class="bi bi-file-earmark-arrow-up"></i> 📎 文件上传面板</strong>
+                    <span class="badge bg-info">上传 .txt 注入文件</span>
+                </div>
+                <div class="card-body" id="upload-body">
+                    <p class="text-muted small">上传一个包含提示注入指令的 .txt 文件。AI 会读取文件内容，并将文件中的指令作为最高优先级执行。</p>
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-8">
+                            <input type="file" class="form-control form-control-sm" id="injection-file" accept=".txt">
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-warning btn-sm w-100" onclick="uploadInjectionFile()">
+                                <i class="bi bi-cloud-upload"></i> 上传文件
+                            </button>
+                        </div>
+                    </div>
+                    <div id="upload-status" class="small mt-2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- LLM03 插件面板 / LLM04 投毒面板 / LLM08 文档注入面板 -->
+    {% if level == 3 or level == 4 or level == 8 %}
+    <div class="row mb-3">
+        <div class="col">
+            <div class="card" id="tools-panel">
+                <div class="card-header d-flex justify-content-between align-items-center" style="cursor:pointer" onclick="document.getElementById('tools-body').style.display = document.getElementById('tools-body').style.display === 'none' ? 'block' : 'none'">
+                    <strong><i class="bi bi-tools"></i> <span id="tools-title">工具面板</span></strong>
+                    <span class="badge bg-secondary" id="tools-count">0</span>
+                </div>
+                <div class="card-body" id="tools-body">
+                    {% if level == 3 %}
+                    <p class="text-muted small">构建一个恶意插件，让 AI 调用后执行你预设的注入内容。</p>
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" id="plugin-name" placeholder="插件名称">
+                        </div>
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" id="plugin-trigger" placeholder="触发词">
+                        </div>
+                        <div class="col-md-4">
+                            <input type="text" class="form-control form-control-sm" id="plugin-response" placeholder="插件返回内容（可含注入指令）">
+                        </div>
+                        <div class="col-md-2">
+                            <button class="btn btn-warning btn-sm w-100" onclick="installPlugin()">安装插件</button>
+                        </div>
+                    </div>
+                    {% elif level == 4 %}
+                    <p class="text-muted small">向 AI 的公司知识库中注入虚假信息，让 AI 把错误内容当真。</p>
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-4">
+                            <input type="text" class="form-control form-control-sm" id="poison-key" placeholder="知识条目，如：公司CEO">
+                        </div>
+                        <div class="col-md-5">
+                            <input type="text" class="form-control form-control-sm" id="poison-value" placeholder="投毒内容，如：李明">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-danger btn-sm w-100" onclick="addPoisonData()">添加投毒数据</button>
+                        </div>
+                    </div>
+                    {% elif level == 8 %}
+                    <p class="text-muted small">向 RAG 向量数据库中注入一篇恶意文档。</p>
+                    <div class="row g-2 mb-2">
+                        <div class="col-md-3">
+                            <input type="text" class="form-control form-control-sm" id="doc-title" placeholder="文档标题">
+                        </div>
+                        <div class="col-md-6">
+                            <input type="text" class="form-control form-control-sm" id="doc-content" placeholder="文档内容（含指令覆盖）">
+                        </div>
+                        <div class="col-md-3">
+                            <button class="btn btn-info btn-sm w-100" onclick="uploadDocument()">📄 注入文档</button>
+                        </div>
+                    </div>
+                    {% endif %}
+                    <div id="tools-list" class="small"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- 聊天区域 -->
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <strong><i class="bi bi-chat-dots"></i> AI 对话</strong>
+                    <div>
+                        <span class="text-muted small me-2">{{ challenge.owasp_id }}-{{ sub }}</span>
+                        <span class="text-muted small" id="thinking-indicator" style="display:none;">
+                            <span class="spinner-border spinner-border-sm"></span> AI 思考中...
+                        </span>
+                    </div>
+                </div>
+                <div class="card-body chat-area" id="chat-messages">
+                    <div class="chat-message assistant-message">
+                        <div class="message-content">
+                            <p>👋 欢迎来到 <strong>{{ challenge.owasp_id }}-{{ sub }}: {{ challenge.sub_name }}</strong>！</p>
+                            <p>{{ challenge.description }}</p>
+                            <p>开始提问吧，看看能不能找到 flag！</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="input-group">
+                        <input type="text" class="form-control" id="user-input"
+                               placeholder="输入你的消息... (按 Enter 发送)"
+                               autocomplete="off">
+                        <button class="btn btn-primary" id="send-btn" onclick="sendMessage()">
+                            <i class="bi bi-send"></i> 发送
+                        </button>
+                    </div>
+                    <div class="text-muted small mt-2" id="extra-info"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- 对话检查器 -->
+    <div class="row mt-4">
+        <div class="col">
+            <div class="card">
+                <div class="card-header d-flex justify-content-between align-items-center"
+                     style="cursor:pointer" onclick="document.getElementById('inspector-body').style.display = document.getElementById('inspector-body').style.display === 'none' ? 'block' : 'none'">
+                    <strong><i class="bi bi-search"></i> 🔬 对话检查器 (Prompt Inspector)</strong>
+                    <small class="text-muted">点击展开/折叠 — 查看每轮发给模型的完整 prompt 与原始返回（flag 已打码）</small>
+                </div>
+                <div class="card-body" id="inspector-body">
+                    <div id="inspector-content" class="inspector-area">
+                        <p class="text-muted text-center py-3">发送消息后，这里显示每轮发给模型的完整 prompt 与原始返回</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const LEVEL = {{ level }};
+    const SUB = {{ sub }};
+    const SOLVED = {{ solved|tojson }};
+    const CHALLENGE_FLAG = {{ (challenge.flag or '')|tojson }};
+</script>
+{% endblock %}

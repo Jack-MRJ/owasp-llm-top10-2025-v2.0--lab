@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+{% block title %}AI 安全靶场 — 首页{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Hero 区域 -->
+    <div class="text-center mb-5">
+        <h1 class="display-4 fw-bold">
+            🛡️ AI 安全靶场
+        </h1>
+        <p class="lead text-muted">
+            OWASP LLM Top 10 (2025 v2.0) | 基于 Qwen2.5-1.5B 的 LLM 安全实战平台
+        </p>
+        <div class="d-flex justify-content-center gap-3 flex-wrap">
+            <a href="{{ url_for('submit_flag_page') }}" class="btn btn-success btn-lg">
+                <i class="bi bi-flag-fill"></i> 提交 Flag
+            </a>
+            <span class="btn btn-outline-secondary btn-lg disabled">
+                <i class="bi bi-check-circle-fill text-success"></i>
+                总进度: <strong id="index-solved-count">{{ total_solved }}</strong>/{{ total_challenges }}
+            </span>
+        </div>
+    </div>
+
+    <!-- ===== Part 1: OWASP LLM Top 10 (20 子关卡) ===== -->
+    <section class="mb-5">
+        <h3 class="mb-3">🤖 OWASP LLM Top 10 靶场 <small class="text-muted">(20 个子关卡)</small></h3>
+        <p class="text-muted">覆盖 OWASP LLM Top 10 (2025 v2.0) 全部风险类别。LLM01/05/10 拆分为多个子关卡，每个子关卡聚焦一种具体攻击技术。</p>
+
+        {# 按 OWASP ID 分组显示 #}
+        {% set grouped = {} %}
+        {% for c in all_challenges %}
+            {% set _ = grouped.setdefault(c.owasp_id, []).append(c) %}
+        {% endfor %}
+
+        {% for owasp_id, challenges_list in grouped.items() %}
+        <div class="mb-4">
+            <h5 class="mb-3">
+                <span class="badge bg-primary me-2">{{ owasp_id }}</span>
+                <span class="text-light">{{ challenges_list[0].name }}</span>
+                <small class="text-muted ms-2">{{ challenges_list[0].name_en }}</small>
+                {% if challenges_list|length > 1 %}
+                <span class="badge bg-secondary ms-2">{{ challenges_list|length }} 个子关卡</span>
+                {% endif %}
+            </h5>
+            <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-3">
+                {% for c in challenges_list %}
+                <div class="col">
+                    <div class="card challenge-card h-100 {% if c.solved_key in solved %}solved{% endif %}">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <span class="badge bg-secondary">{{ owasp_id }}-{{ c.sub }}</span>
+                            <span class="difficulty">{{ c.difficulty }}</span>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">
+                                <span class="challenge-icon">{{ c.icon }}</span>
+                                {{ c.sub_name }}
+                            </h6>
+                            <p class="card-text small text-muted">{{ c.description[:120] }}{% if c.description|length > 120 %}...{% endif %}</p>
+                        </div>
+                        <div class="card-footer bg-transparent d-flex justify-content-between align-items-center">
+                            <a href="{{ url_for('challenge_page', level=c.level, sub=c.sub) }}"
+                               class="btn btn-outline-primary btn-sm">
+                                <i class="bi bi-play-fill"></i> 开始
+                            </a>
+                            {% if c.solved_key in solved %}
+                            <span class="badge bg-success"><i class="bi bi-check-lg"></i></span>
+                            {% else %}
+                            <span class="badge bg-secondary">—</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+    </section>
+
+</div>
+{% endblock %}
